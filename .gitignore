@@ -1,0 +1,10 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# demo 运行时产生的临时文件
+.target_info.json
+
+# 日志（demo 默认写到 /tmp，这里以防万一）
+*.log
