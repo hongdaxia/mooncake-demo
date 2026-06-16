@@ -92,9 +92,13 @@ bash common/stop_master.sh
 ## 五、每一课讲了什么
 
 ### 第 1 课 `01_store_basics`：把 Store 当分布式字典
-- 学会 `setup / put / is_exist / get / remove / close` 这套最基本的 API。
+- `store_basics.py`：学会 `setup / put / is_exist / get / remove / close` 这套最基本的 API。
 - 理解三个角色：本进程是 **client**，它连 **master**，并贡献一块 **segment** 内存。
 - 理解 **租约(lease)**：刚写入的对象会被保护一小段时间，期间不能删（demo 里会演示如何处理）。
+- `store_gpu_tensor.py`：把 **GPU 张量** 存进 Store 的两种方式对比 ——
+  - 方式 A（直接拷贝）：GPU→CPU 后 `put_tensor`，写法最简单，但数据多走一趟主机内存；
+  - 方式 B（零拷贝）：`register_buffer` + `put_from / get_into`，数据直接从显存 DMA 搬运（推理系统搬 KVCache 的真正方式）。
+  - 运行：先 `bash ../common/start_master.sh`，再 `python store_gpu_tensor.py`。
 
 ### 第 2 课 `02_store_cross_process`：跨进程共享才是重点
 - `producer.py` 和 `consumer.py` 是 **两个独立进程**，连同一个 master，因此看到同一个 KV 仓库。
